@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      width: 400px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    form {
+      margin-top: 20px;
+    }
+
+    input, button {
+      padding: 8px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #f0f0f0;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .delete-btn {
+      background-color: #ff6b6b;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>To-Do List</h1>
+    <form action="/add" method="POST">
+      <label for="tanggal">Tanggal:</label>
+      <input type="date" id="tanggal" name="tanggal" required>
+      <br>
+    
+      <label for="namaAktivitas">Nama Aktivitas:</label>
+      <input type="text" id="namaAktivitas" name="namaAktivitas" required>
+      <br>
+    
+      <label for="waktu">Waktu:</label>
+      <input type="time" id="waktu" name="waktu" required>
+      <br>
+    
+      <label for="keterangan">Keterangan:</label>
+      <input type="text" id="keterangan" name="keterangan" required>
+      <br>
+    
+      <label for="prioritas">Prioritas:</label>
+      <select id="prioritas" name="prioritas" required>
+        <option value="tinggi">Tinggi</option>
+        <option value="sedang">Sedang</option>
+        <option value="rendah">Rendah</option>
+      </select>
+      <br>
+    
+      <label for="kategori">Kategori:</label>
+      <input type="text" id="kategori" name="kategori" required>
+      <br>
+    
+      <label for="lokasi">Lokasi:</label>
+      <input type="text" id="lokasi" name="lokasi" required>
+      <br>
+    
+      <label for="keteranganLain">Keterangan Lain:</label>
+      <textarea id="keteranganLain" name="keteranganLain" required></textarea>
+      <br>
+    
+      <button type="submit">Tambahkan Aktivitas</button>
+    </form>
+    
+    </form>
+    <ul>
+      <% tasks.forEach(task => { %>
+        <li>
+          <span><strong>Tanggal:</strong> <%= task.tanggal.toDateString() %></span>
+          <span><strong>Aktivitas:</strong> <%= task.namaAktivitas %></span>
+          <span><strong>Waktu:</strong> <%= task.waktu %></span>
+          <span><strong>Keterangan:</strong> <%= task.keterangan %></span>
+          <span><strong>Prioritas:</strong> <%= task.prioritas %></span>
+          <span><strong>Kategori:</strong> <%= task.kategori %></span>
+          <span><strong>Lokasi:</strong> <%= task.lokasi %></span>
+          <span><strong>Keterangan Lain:</strong> <%= task.keteranganLain %></span>
+          <form action="/delete/<%= task._id %>" method="POST">
+            <button class="delete-btn" type="submit">Hapus</button>
+          </form>
+        </li>
+      <% }); %>
+    </ul>    
+  </div>
+</body>
+</html>
