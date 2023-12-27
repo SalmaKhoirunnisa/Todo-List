@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>To-Do List</title>
   <style>
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Times New Roman', Times, serif, sans-serif;
       background-color: #f4f4f4;
       margin: 0;
       padding: 0;
@@ -17,16 +18,18 @@
     }
 
     .container {
-      background-color: #fff;
+      background-color: #b3e4e4;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       padding: 20px;
-      width: 400px;
-      text-align: center;
+      width: 80%; /* Lebar container 80% dari lebar tampilan */
+      text-align: left; /* Ratakan teks ke kiri */
+      margin: 20px; /* Beri margin untuk memberikan jarak dari tepi tampilan */
     }
 
     h1 {
       color: #333;
+      text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2); /* Tambahkan bayangan teks */
     }
 
     form {
@@ -36,8 +39,10 @@
     input, button, select, textarea {
       padding: 8px;
       margin: 5px;
-      border: 1px solid #ccc;
+      border: 1px solid #e1f4f5;
       border-radius: 4px;
+      width: 100%; /* Lebar input 100% dari parentnya */
+      box-sizing: border-box; /* Agar padding tidak menambah lebar elemen */
     }
 
     ul {
@@ -46,23 +51,41 @@
     }
 
     li {
-      margin: 10px 0;
-      padding: 10px;
-      background-color: #f0f0f0;
-      border-radius: 4px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  display: flex;
+  flex-wrap: wrap; /* Menambahkan flex-wrap untuk menjaga elemen-elemen tetap dalam border */
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px; /* Sesuaikan ukuran huruf sesuai kebutuhan Anda */
+}
 
-    .delete-btn {
-      background-color: #ff6b6b;
+li > span {
+  flex: 1; /* Menggunakan flex untuk membuat setiap elemen span mengambil ruang yang sama */
+  margin-right: 10px; /* Menambahkan margin-right untuk memberikan ruang antar elemen */
+}
+
+.delete-btn {
+  background-color: #ff6b6b;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 5px; /* Menambahkan margin-top pada tombol hapus */
+}
+.update-btn {
+      background-color: #f8e80a;
       color: #fff;
       border: none;
       padding: 5px 10px;
       border-radius: 4px;
       cursor: pointer;
-    }
+      margin-to
+}
+
   </style>
 </head>
 <body>
@@ -109,21 +132,89 @@
     </form>
     
     <ul>
-      <!-- Static content for demonstration purposes -->
-      <li>
-        <span><strong>Tanggal:</strong> January 1, 2023</span>
-        <span><strong>Aktivitas:</strong> Example Activity</span>
-        <span><strong>Waktu:</strong> 12:00 PM</span>
-        <span><strong>Keterangan:</strong> Example Description</span>
-        <span><strong>Prioritas:</strong> Tinggi</span>
-        <span><strong>Kategori:</strong> Example Category</span>
-        <span><strong>Lokasi:</strong> Example Location</span>
-        <span><strong>Keterangan Lain:</strong> Additional Information</span>
-        <form action="/delete/example_id" method="POST">
-          <button class="delete-btn" type="submit">Hapus</button>
-        </form>
-      </li>
-    </ul>    
-  </div>
-</body>
-</html>
+      <!-- ... (your existing HTML) ... -->
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const form = document.querySelector('form');
+          const ul = document.querySelector('ul');
+          let editMode = false;
+          let editItem = null;
+  
+          form.addEventListener('submit', function (event) {
+            event.preventDefault();
+  
+            // Extract form values
+            const tanggal = document.getElementById('tanggal').value;
+            const namaAktivitas = document.getElementById('namaAktivitas').value;
+            const waktu = document.getElementById('waktu').value;
+            const keterangan = document.getElementById('keterangan').value;
+            const prioritas = document.getElementById('prioritas').value;
+            const kategori = document.getElementById('kategori').value;
+            const lokasi = document.getElementById('lokasi').value;
+            const keteranganLain = document.getElementById('keteranganLain').value;
+  
+            if (editMode && editItem) {
+              // Update existing item in edit mode
+              const spans = Array.from(editItem.querySelectorAll('span'));
+              spans[0].textContent = `<strong>Tanggal:</strong> ${tanggal}`;
+              spans[1].textContent = `<strong>Aktivitas:</strong> ${namaAktivitas}`;
+              spans[2].textContent = `<strong>Waktu:</strong> ${waktu}`;
+              spans[3].textContent = `<strong>Keterangan:</strong> ${keterangan}`;
+              spans[4].textContent = `<strong>Prioritas:</strong> ${prioritas}`;
+              spans[5].textContent = `<strong>Kategori:</strong> ${kategori}`;
+              spans[6].textContent = `<strong>Lokasi:</strong> ${lokasi}`;
+              spans[7].textContent = `<strong>Keterangan Lain:</strong> ${keteranganLain}`;
+              
+              editMode = false;
+              editItem = null;
+            } else {
+              // Create a new list item
+              const li = document.createElement('li');
+              li.innerHTML = `
+                <span><strong>Tanggal:</strong> ${tanggal}</span>
+                <span><strong>Aktivitas:</strong> ${namaAktivitas}</span>
+                <span><strong>Waktu:</strong> ${waktu}</span>
+                <span><strong>Keterangan:</strong> ${keterangan}</span>
+                <span><strong>Prioritas:</strong> ${prioritas}</span>
+                <span><strong>Kategori:</strong> ${kategori}</span>
+                <span><strong>Lokasi:</strong> ${lokasi}</span>
+                <span><strong>Keterangan Lain:</strong> ${keteranganLain}</span>
+                <form action="/delete/example_id" method="POST">
+                  <button class="delete-btn" type="submit">Hapus</button>
+                </form>
+                <button class="update-btn" type="button">Perbarui</button>
+              `;
+  
+              ul.appendChild(li);
+            }
+  
+            // Clear form fields
+            form.reset();
+          });
+  
+          ul.addEventListener('click', function (event) {
+            if (event.target.classList.contains('delete-btn')) {
+              event.preventDefault();
+              const li = event.target.closest('li');
+              li.remove();
+            } else if (event.target.classList.contains('update-btn')) {
+              const spans = Array.from(event.target.closest('li').querySelectorAll('span'));
+              document.getElementById('tanggal').value = spans[0].textContent.replace('<strong>Tanggal:</strong>', '').trim();
+              document.getElementById('namaAktivitas').value = spans[1].textContent.replace('<strong>Aktivitas:</strong>', '').trim();
+              document.getElementById('waktu').value = spans[2].textContent.replace('<strong>Waktu:</strong>', '').trim();
+              document.getElementById('keterangan').value = spans[3].textContent.replace('<strong>Keterangan:</strong>', '').trim();
+              document.getElementById('prioritas').value = spans[4].textContent.replace('<strong>Prioritas:</strong>', '').trim();
+              document.getElementById('kategori').value = spans[5].textContent.replace('<strong>Kategori:</strong>', '').trim();
+              document.getElementById('lokasi').value = spans[6].textContent.replace('<strong>Lokasi:</strong>', '').trim();
+              document.getElementById('keteranganLain').value = spans[7].textContent.replace('<strong>Keterangan Lain:</strong>', '').trim();
+              
+              editMode = true;
+              editItem = event.target.closest('li');
+            }
+          });
+        });
+      </script>
+    </div>
+  </body>
+  </html>
